@@ -141,11 +141,12 @@ class SSD(nn.Module):
         #print('prior shape:',self.priors.shape)
         
         if phase == "test":
-            output = self.detect(
+            output = self.detect.apply(
                 loc.view(loc.size(0), -1, 5),                   # loc preds
                 self.softmax(conf.view(conf.size(0), -1,
                              self.num_classes)),                # conf preds
-                self.priors.type(type(x.data))                  # default boxes
+                self.priors.type(type(x.data)),                  # default boxes
+                self.num_classes, 0, 300, 0.01, 0.45
             )
         else:
             output = (
